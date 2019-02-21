@@ -27,6 +27,10 @@ namespace SustainableChemistryWeb.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         // GET: api/SustainableChemistry
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AppFunctionalgroup>>> GetFunctionalGroupList()

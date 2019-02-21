@@ -25,10 +25,23 @@ namespace SustainableChemistryWeb.Controllers
         }
 
         // GET: Namedreactions
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string nameSearchString, string funcGroupSearchString)
         {
-            var sustainableChemistryContext = _context.AppNamedreaction.Include(a => a.Catalyst).Include(a => a.FunctionalGroup).Include(a => a.Solvent);
-            return View(await sustainableChemistryContext.ToListAsync());
+            var reactions = from s in _context.AppNamedreaction
+                           select s;
+
+            if (!String.IsNullOrEmpty(nameSearchString))
+            {
+                reactions = reactions.Where(s => s.Name.Contains(nameSearchString, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!String.IsNullOrEmpty(funcGroupSearchString))
+            {
+                reactions = reactions.Where(s => s.Name.Contains(funcGroupSearchString, StringComparison.OrdinalIgnoreCase));
+            }
+
+            var sustainableChemistryContext = reactions.Include(a => a.Catalyst).Include(a => a.FunctionalGroup).Include(a => a.Solvent);
+            return View(await sustainableChemistryContext.AsNoTracking().ToListAsync());
         }
 
         // GET: Namedreactions/Details/5
@@ -43,6 +56,10 @@ namespace SustainableChemistryWeb.Controllers
                 .Include(a => a.Catalyst)
                 .Include(a => a.FunctionalGroup)
                 .Include(a => a.Solvent)
+                .Include(a => a.AppNamedreactionReactants)
+                    .ThenInclude(a => a.Reactant)
+                .Include(a => a.AppNamedreactionByProducts)
+                    .ThenInclude(a => a.Reactant)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (appNamedreaction == null)
             {
@@ -55,9 +72,9 @@ namespace SustainableChemistryWeb.Controllers
         // GET: Namedreactions/Create
         public IActionResult Create()
         {
-            ViewData["CatalystId"] = new SelectList(_context.AppCatalyst, "Id", "Description");
-            ViewData["FunctionalGroupId"] = new SelectList(_context.AppFunctionalgroup, "Id", "Image");
-            ViewData["SolventId"] = new SelectList(_context.AppSolvent, "Id", "Description");
+            ViewData["CatalystId"] = new SelectList(_context.AppCatalyst, "Id", "Name");
+            ViewData["FunctionalGroupId"] = new SelectList(_context.AppFunctionalgroup, "Id", "Name");
+            ViewData["SolventId"] = new SelectList(_context.AppSolvent, "Id", "Name");
             return View();
         }
 
@@ -91,9 +108,9 @@ namespace SustainableChemistryWeb.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CatalystId"] = new SelectList(_context.AppCatalyst, "Id", "Description", appNamedreaction.CatalystId);
-            ViewData["FunctionalGroupId"] = new SelectList(_context.AppFunctionalgroup, "Id", "Image", appNamedreaction.FunctionalGroupId);
-            ViewData["SolventId"] = new SelectList(_context.AppSolvent, "Id", "Description", appNamedreaction.SolventId);
+            ViewData["CatalystId"] = new SelectList(_context.AppCatalyst, "Id", "Name", appNamedreaction.CatalystId);
+            ViewData["FunctionalGroupId"] = new SelectList(_context.AppFunctionalgroup, "Id", "Name", appNamedreaction.FunctionalGroupId);
+            ViewData["SolventId"] = new SelectList(_context.AppSolvent, "Id", "Name", appNamedreaction.SolventId);
             return View(appNamedreaction);
         }
 
@@ -110,9 +127,9 @@ namespace SustainableChemistryWeb.Controllers
             {
                 return NotFound();
             }
-            ViewData["CatalystId"] = new SelectList(_context.AppCatalyst, "Id", "Description", appNamedreaction.CatalystId);
-            ViewData["FunctionalGroupId"] = new SelectList(_context.AppFunctionalgroup, "Id", "Image", appNamedreaction.FunctionalGroupId);
-            ViewData["SolventId"] = new SelectList(_context.AppSolvent, "Id", "Description", appNamedreaction.SolventId);
+            ViewData["CatalystId"] = new SelectList(_context.AppCatalyst, "Id", "Name", appNamedreaction.CatalystId);
+            ViewData["FunctionalGroupId"] = new SelectList(_context.AppFunctionalgroup, "Id", "Name", appNamedreaction.FunctionalGroupId);
+            ViewData["SolventId"] = new SelectList(_context.AppSolvent, "Id", "Name", appNamedreaction.SolventId);
             return View(appNamedreaction);
         }
 
@@ -165,9 +182,9 @@ namespace SustainableChemistryWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CatalystId"] = new SelectList(_context.AppCatalyst, "Id", "Description", appNamedreaction.CatalystId);
-            ViewData["FunctionalGroupId"] = new SelectList(_context.AppFunctionalgroup, "Id", "Image", appNamedreaction.FunctionalGroupId);
-            ViewData["SolventId"] = new SelectList(_context.AppSolvent, "Id", "Description", appNamedreaction.SolventId);
+            ViewData["CatalystId"] = new SelectList(_context.AppCatalyst, "Id", "Name", appNamedreaction.CatalystId);
+            ViewData["FunctionalGroupId"] = new SelectList(_context.AppFunctionalgroup, "Id", "Name", appNamedreaction.FunctionalGroupId);
+            ViewData["SolventId"] = new SelectList(_context.AppSolvent, "Id", "Name", appNamedreaction.SolventId);
             return View(appNamedreaction);
         }
 

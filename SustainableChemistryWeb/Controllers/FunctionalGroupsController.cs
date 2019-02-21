@@ -25,9 +25,33 @@ namespace SustainableChemistryWeb.Controllers
         }
 
         // GET: FunctionalGroups
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string nameSearchString, string smilesSearchString)
         {
-            return View(await _context.AppFunctionalgroup.ToListAsync());
+            var retVal = new List<AppFunctionalgroup>();
+            var groups = from s in _context.AppFunctionalgroup
+                            select s;
+
+            if (!String.IsNullOrEmpty(nameSearchString))
+            {
+                groups = groups.Where(s => s.Name.Contains(nameSearchString, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!String.IsNullOrEmpty(smilesSearchString)) await Task.Run(() =>
+            {
+                ChemInfo.Molecule molecule = new ChemInfo.Molecule(smilesSearchString);
+                foreach (var fg in groups)
+                {
+                    string smarts = fg.Smarts;
+                    if (!string.IsNullOrEmpty(fg.Smarts))
+                        if (molecule.FindFunctionalGroup(fg.Smarts))
+                        {
+                            retVal.Add(fg);
+                        }
+                }
+            });
+            else retVal.AddRange(groups.ToList());
+
+            return View(retVal.ToAsyncEnumerable());
         }
 
         // GET: FunctionalGroups/Details/5

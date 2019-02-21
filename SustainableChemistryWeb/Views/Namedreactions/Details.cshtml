@@ -7,7 +7,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>AppNamedreaction</h4>
+    <h4>Named Reaction</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -17,29 +17,35 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ReactantA)
+            @Html.DisplayNameFor(model => model.FunctionalGroup)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ReactantA)
+            @Html.DisplayFor(model => model.FunctionalGroup.Name)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ReactantB)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ReactantB)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ReactantC)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ReactantC)
-        </dd>
+        @foreach (var item in Model.AppNamedreactionReactants)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => item.Reactant)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => item.Reactant.Name)
+            </dd>
+        }
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Product)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Product)
         </dd>
+        @foreach (var item in Model.AppNamedreactionByProducts)
+        {
+            <dt class="col-sm-2">
+                By-Product
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => item.Reactant.Name)
+            </dd>
+        }
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Heat)
         </dt>
@@ -53,44 +59,33 @@
             @Html.DisplayFor(model => model.AcidBase)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Image)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Image)
-        </dd>
-        <dt class="col-sm-2">
-            
-        </dt>
-        <dd class="col-sm-10">
-            <img src="~/@Model.Image" />)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Url)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Url)
-        </dd>
-        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Catalyst)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Catalyst.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FunctionalGroup)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FunctionalGroup.Image)
+            @Html.DisplayFor(model => model.Catalyst.Name)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Solvent)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Solvent.Description)
+            @Html.DisplayFor(model => model.Solvent.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Url)
+        </dt>
+        <dd class="col-sm-10">
+            <a href="model.Url">@Html.DisplayFor(model => model.Url)</a>
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+        <dd class="col-sm-10">
+            <img src="~/model.Image" style='height: auto; width: 100%; object-fit: contain' />
+            <!-- @Html.DisplayFor(model => model.Image) -->
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
