@@ -6,16 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SustainableChemistryWeb.Models;
+using Microsoft.AspNetCore.Hosting;
+
+// See answer here for getting webroot...
+// https://stackoverflow.com/questions/43709657/how-to-get-root-directory-of-project-in-asp-net-core-directory-getcurrentdirect
 
 namespace SustainableChemistryWeb.Controllers
 {
     public class FunctionalGroupsController : Controller
     {
         private readonly SustainableChemistryContext _context;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public FunctionalGroupsController(SustainableChemistryContext context)
+        public FunctionalGroupsController(SustainableChemistryContext context, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         // GET: FunctionalGroups
@@ -55,6 +61,23 @@ namespace SustainableChemistryWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Smarts,Image")] AppFunctionalgroup appFunctionalgroup)
         {
+            if (appFunctionalgroup.Image != null && appFunctionalgroup.Image.Length > 0)
+            {
+                var file = System.IO.File.Open(appFunctionalgroup.Image, System.IO.FileMode.Open);
+                appFunctionalgroup.Image = "Images/FunctionalGroups/" + System.IO.Path.GetFileName(file.Name);
+                //There is an error here
+                //var uploads = System.IO.Path.Combine(_appEnvironment.WebRootPath, "uploads\\img");
+                if (file.Length > 0)
+                {
+                    var fileName = _hostingEnvironment.WebRootPath + "\\Images\\FunctionalGroups\\" + System.IO.Path.GetFileName(file.Name);
+                    using (var stream = new System.IO.FileStream(fileName, System.IO.FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+                }
+                file.Close();
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(appFunctionalgroup);
@@ -90,6 +113,23 @@ namespace SustainableChemistryWeb.Controllers
             if (id != appFunctionalgroup.Id)
             {
                 return NotFound();
+            }
+
+            if (appFunctionalgroup.Image != null && appFunctionalgroup.Image.Length > 0)
+            {
+                var file = System.IO.File.Open(appFunctionalgroup.Image, System.IO.FileMode.Open);
+                appFunctionalgroup.Image = "Images/FunctionalGroups/" + System.IO.Path.GetFileName(file.Name); 
+                //There is an error here
+                //var uploads = System.IO.Path.Combine(_appEnvironment.WebRootPath, "uploads\\img");
+                if (file.Length > 0)
+                {
+                    var fileName = _hostingEnvironment.WebRootPath + "\\Images\\FunctionalGroups\\" + System.IO.Path.GetFileName(file.Name);
+                    using (var stream = new System.IO.FileStream(fileName, System.IO.FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    } 
+                }
+                file.Close();
             }
 
             if (ModelState.IsValid)

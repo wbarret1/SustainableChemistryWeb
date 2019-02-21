@@ -76,26 +76,27 @@
                 @Html.DisplayFor(modelItem => item.AcidBase)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Image)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Url)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Catalyst.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FunctionalGroup.Image)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Solvent.Description)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                <img src="~/@item.Image" style='height: 100%; width: 100%; object-fit: contain' />
+                <!-- @Html.DisplayFor(modelItem => item.Image) -->
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Url)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Catalyst.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FunctionalGroup.Image)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Solvent.Description)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>

@@ -34,7 +34,8 @@
                 @Html.DisplayFor(modelItem => item.Smarts)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Image)
+                <img src="~/@item.Image" style='height: 100%; width: 100%; object-fit: contain' />
+               <!-- @Html.DisplayFor(modelItem => item.Image) -->
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

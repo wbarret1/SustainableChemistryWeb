@@ -6,16 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SustainableChemistryWeb.Models;
+using Microsoft.AspNetCore.Hosting;
+
+// See answer here for getting webroot...
+// https://stackoverflow.com/questions/43709657/how-to-get-root-directory-of-project-in-asp-net-core-directory-getcurrentdirect
 
 namespace SustainableChemistryWeb.Controllers
 {
     public class NamedreactionsController : Controller
     {
+        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly SustainableChemistryContext _context;
 
-        public NamedreactionsController(SustainableChemistryContext context)
+        public NamedreactionsController(SustainableChemistryContext context, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         // GET: Namedreactions
@@ -62,6 +68,23 @@ namespace SustainableChemistryWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,ReactantA,ReactantB,ReactantC,Product,Heat,AcidBase,Image,CatalystId,FunctionalGroupId,SolventId,Url")] AppNamedreaction appNamedreaction)
         {
+            if (appNamedreaction.Image != null && appNamedreaction.Image.Length > 0)
+            {
+                var file = System.IO.File.Open(appNamedreaction.Image, System.IO.FileMode.Open);
+                appNamedreaction.Image = "Images/Reactions/" + System.IO.Path.GetFileName(file.Name);
+                //There is an error here
+                //var uploads = System.IO.Path.Combine(_appEnvironment.WebRootPath, "uploads\\img");
+                if (file.Length > 0)
+                {
+                    var fileName = _hostingEnvironment.WebRootPath + "\\Images\\Reactions\\" + System.IO.Path.GetFileName(file.Name);
+                    using (var stream = new System.IO.FileStream(fileName, System.IO.FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+                }
+                file.Close();
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(appNamedreaction);
@@ -103,6 +126,23 @@ namespace SustainableChemistryWeb.Controllers
             if (id != appNamedreaction.Id)
             {
                 return NotFound();
+            }
+
+            if (appNamedreaction.Image != null && appNamedreaction.Image.Length > 0)
+            {
+                var file = System.IO.File.Open(appNamedreaction.Image, System.IO.FileMode.Open);
+                appNamedreaction.Image = "Images/Reactions/" + System.IO.Path.GetFileName(file.Name);
+                //There is an error here
+                //var uploads = System.IO.Path.Combine(_appEnvironment.WebRootPath, "uploads\\img");
+                if (file.Length > 0)
+                {
+                    var fileName = _hostingEnvironment.WebRootPath + "\\Images\\Reactions\\" + System.IO.Path.GetFileName(file.Name);
+                    using (var stream = new System.IO.FileStream(fileName, System.IO.FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+                }
+                file.Close();
             }
 
             if (ModelState.IsValid)
