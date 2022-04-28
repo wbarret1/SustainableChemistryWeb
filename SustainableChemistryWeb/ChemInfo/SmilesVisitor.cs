@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Antlr4.Runtime.Misc;
+using Antlr4.Runtime.Tree;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Antlr4.Runtime.Misc;
-using Antlr4.Runtime.Tree;
 
 namespace SustainableChemistryWeb.ChemInfo
 {
@@ -41,6 +39,7 @@ namespace SustainableChemistryWeb.ChemInfo
                 IParseTree item = tree.GetChild(i);
                 if (typeof(smilesParser.ChainContext).IsAssignableFrom(item.GetType()))
                     VisitChain((smilesParser.ChainContext)item);
+                // else throw new System.NotImplementedException("String not a chain.");
             }
             return retVal.Atoms;
         }
@@ -76,6 +75,12 @@ namespace SustainableChemistryWeb.ChemInfo
                 {
                     Atom a = (Atom)VisitHalogen((smilesParser.HalogenContext)tree);
                     a.AtomType = ChemInfo.AtomType.ORGANIC;
+                    return a;
+                }
+                else if (typeof(smilesParser.WildcardContext).IsAssignableFrom(tree.GetType()))
+                {
+                    Atom a = (Atom)VisitWildcard((smilesParser.WildcardContext)tree);
+                    a.AtomType = ChemInfo.AtomType.WILDCARD;
                     return a;
                 }
                 else
@@ -412,6 +417,11 @@ namespace SustainableChemistryWeb.ChemInfo
         public override object VisitHalogen([NotNull] smilesParser.HalogenContext context)
         {
             return new Atom(context.GetChild(0).GetText(), AtomType.ORGANIC);
+        }
+
+        public override object VisitWildcard([NotNull] smilesParser.WildcardContext context)
+        {
+            return new Atom(context.GetChild(0).GetText(), AtomType.WILDCARD);
         }
 
         public override object VisitRingbond([NotNull] smilesParser.RingbondContext context)

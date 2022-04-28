@@ -1,36 +1,46 @@
-﻿@model SustainableChemistryWeb.Models.AppFunctionalgroup
+﻿@model SustainableChemistryWeb.Models.FunctionalGroup
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Functional group</h1>
-
-<div>
-    <h4>Details</h4>
-    <hr />
+<h3>Sustainable Chemistry Expert Framework - Functional Group</h3>
+@using (Html.BeginForm("Details", "FunctionalGroups", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Smarts)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Smarts)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.URL)
+        </dt>
+        <dd class="col-sm-10">
+            <a href="@Html.DisplayFor(model => model.URL)" target="_newtab"> @Html.DisplayFor(model => model.URL)</a>
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Image)
         </dt>
         <dd class="col-sm-10">
             <img src="~/@Model.Image" />
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a><text> | </text>
+        }
+        @*
+            <a asp-action="Index">Back to Functional Group List</a> |
+            <a href='javascript:history.go(-1)'>Return to Previous Page </a>
+        *@
+    </div>
+}

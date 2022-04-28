@@ -1,91 +1,100 @@
-﻿@model SustainableChemistryWeb.Models.AppNamedreaction
+﻿@model SustainableChemistryWeb.ViewModels.NamedReactionViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+@{
+    string referer = Context.Request.Headers["Referer"].ToString();
+    Uri baseUri = new Uri(referer);}
 
-<div>
-    <h4>Named Reaction</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FunctionalGroup)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FunctionalGroup.Name)
-        </dd>
-        @foreach (var item in Model.AppNamedreactionReactants)
-        {
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => item.Reactant)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => item.Reactant.Name)
-            </dd>
-        }
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Product)
-        </dd>
-        @foreach (var item in Model.AppNamedreactionByProducts)
-        {
-            <dt class="col-sm-2">
-                By-Product
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => item.Reactant.Name)
-            </dd>
-        }
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Heat)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Heat)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AcidBase)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AcidBase)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Catalyst)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Catalyst.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Solvent)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Solvent.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Url)
-        </dt>
-        <dd class="col-sm-10">
-            <a href="model.Url">@Html.DisplayFor(model => model.Url)</a>
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Image)
-        </dt>
-        <dd class="col-sm-10">
-            <img src="~/model.Image" style='height: auto; width: 100%; object-fit: contain' />
-            <!-- @Html.DisplayFor(model => model.Image) -->
-        </dd>
-    </dl>
-    </div>
+<h3>Sustainable Chemistry Expert Framework - Named Reaction</h3>
+@using (Html.BeginForm("Details", "NamedReactions", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
     <div>
-        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-        <a asp-action="Index">Back to List</a>
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.FunctionalGroup)
+            </dt>
+            <dd class="col-sm-10">
+                <a asp-controller="FunctionalGroup" asp-action="Details" asp-route-id="@Html.DisplayFor(model => model.FunctionalGroup.Id)")>@Html.DisplayFor(model => model.FunctionalGroup.Name)</a>
+            </dd>
+            @foreach (var item in Model.AppNamedreactionReactants)
+            {
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => item.Reactant)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => item.Reactant.Name)
+                </dd>
+            }
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Product)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Product)
+            </dd>
+            @foreach (var item in Model.AppNamedreactionByProducts)
+            {
+                <dt class="col-sm-2">
+                    By-Product
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => item.Reactant.Name)
+                </dd>
+            }
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Heat)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Heat)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.AcidBase)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.AcidBase)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Catalyst)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Catalyst.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Solvent)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Solvent.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Url)
+            </dt>
+            <dd class="col-sm-10">
+                <a href="@Html.DisplayFor(model => model.Url)" target="_newtab">@Html.DisplayFor(model => model.Url)</a>
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Image)
+            </dt>
+            <dd class="col-sm-10">
+                <img src="~/@Html.DisplayTextFor(model => model.Image)" />
+                <!-- @Html.DisplayFor(model => model.Image) -->
+            </dd>
+        </dl>
     </div>
+
+    <div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a><text> | </text>
+        }
+        <a asp-action="Index">Back to Reaction List</a> |
+        <a asp-controller="Home" asp-action="Index">Home</a>
+    </div>
+}

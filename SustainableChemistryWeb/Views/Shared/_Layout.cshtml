@@ -2,7 +2,12 @@
 <html class="js" lang="en" dir="ltr">
 <head>
     <meta charset="utf-8" />
+    <!-- Added to force IE to use compatibility with Edge. This overrides "Display intranet sites in Compatibility View" check box in Compatibility Settings.  ... -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <title>@ViewData["Title"] - Sustainable Chemistry</title>
+
+    <!-- Added for Chosen... -->
+    <link rel="stylesheet" href="~/lib/chosen/chosen.css">
 
     <meta http-equiv="ImageToolbar" content="false" />
     <meta http-equiv="cleartype" content="on" />
@@ -27,21 +32,12 @@
     <meta name="DC.creator" content="" />
     <title>Standalone Template for Applications | US EPA</title>
     <!--googleoff: all-->
-    <link rel="stylesheet" href="https://www.epa.gov/sites/all/libraries/standalone/css/core/style.css" media="all" />
+    <link rel="stylesheet" href="~/css/core/style.css" media="all" />
     <!-- Google Tag Manager -->
     <script>(function (w, d, s, l, i) { w[l] = w[l] || []; w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" }); var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != "dataLayer" ? "&l=" + l : ""; j.async = true; j.src = "//www.googletagmanager.com/gtm.js?id=" + i + dl; f.parentNode.insertBefore(j, f); })(window, document, "script", "dataLayer", "GTM-L8ZB");</script>
     <!-- End Google Tag Manager -->
-    <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-    </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
-              crossorigin="anonymous"
-              integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" />
-    </environment>
-    <link rel="stylesheet" href="~/css/site.css" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body class="html">
     <!-- Google Tag Manager -->
@@ -71,38 +67,6 @@
             </div>
         </div>
     </header>
-    <!--
-        <body>
-            <header>
-                <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-                    <div class="container">
-                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Sustainable Chemistry</a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                                aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                            <ul class="navbar-nav flex-grow-1">
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="FunctionalGroups" asp-action="Index">Functional Groups</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="NamedReactions" asp-action="Index">Named Reactions</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="AppReferences" asp-action="Index">References</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-            </header>
-
-        -->
-
     <nav class="nav main-nav clearfix" role="navigation">
         <div class="nav__inner">
             <h2 class="element-invisible">Main menu</h2>
@@ -120,46 +84,36 @@
         <input checked id="mobile-nav-toggle" type="checkbox">
         <div class="mobile-links element-hidden" id="mobile-links" style="height:2404px;">
             <ul class="mobile-menu">
-                <li class="menu-item" role="presentation"><a class="menu-link" href="https://www.epa.gov/environmental-topics" role="menuitem" title="Learn about Environmental Topics that EPA covers.">Environmental Topics</a></li>
+                <li class="menu-item" role="presentation"><a class="menu-link" href="https://www.epa.gov/environmental-topics" role="menuitem" title="Learn about Environmental Topics that EPA covers.">Sustainable Chemistry Expert Framework</a></li>
                 <li class="menu-item" role="presentation"><a class="menu-link" href="https://www.epa.gov/laws-regulations" role="menuitem" title="Laws written by Congress provide the authority for EPA to write regulations. Regulations explain the technical, operational, and legal details necessary to implement laws.">Laws &amp; Regulations</a></li>
                 <li class="menu-item" role="presentation"><a class="menu-link" href="https://www.epa.gov/aboutepa" role="menuitem" title="Learn more about our mission and what we do, how we are organized, and our history.">About EPA</a></li>
             </ul>
         </div>
     </div>
-    <section class="main-content clearfix" id="main-content" lang="en" role="main" tabindex="-1">
-        <div class="region-preface clearfix">
-            <div class="block-views-revision-hublinks-block" id="block-views-revision-hublinks-block">
-                <div class="view view-revision-hublinks view-id-revision_hublinks">
-                    <span class="related-info"><strong>Related Topics:</strong></span>
-                    <ul class="menu pipeline">
-                        <li class="menu-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li class="menu-item"><a asp-area="" asp-controller="FunctionalGroups" asp-action="Index">Functional Groups</a></li>
-                        <li class="menu-item"><a asp-area="" asp-controller="NamedReactions" asp-action="Index">Named Reactions</a></li>
-                        <li class="menu-item"><a asp-area="" asp-controller="AppReferences" asp-action="Index">References</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="block block-pane block-pane-epa-web-area-connect" id="block-pane-epa-web-area-connect">
-                <ul class="menu utility-menu">
-                    <li class="menu-item"><a class="menu-link" href="{CONTACT URL}">Contact Us</a></li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
     <div class="container">
-        <partial name="_CookieConsentPartial" />
+        <p></p>
+        @*<partial name="_CookieConsentPartial" />*@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+    <section class="main-content clearfix" id="main-content" lang="en" role="main" tabindex="-1">
+        <div class="region-preface clearfix">
+            <div class="block-views-revision-hublinks-block" id="block-views-revision-hublinks-block">
+                <div class="view view-revision-hublinks view-id-revision_hublinks">
+                    <span class="related-info"><strong>View Databases:</strong></span>
+                    <ul class="menu pipeline">
 
-    <!-- Microsoft's footer - empty...
-    <footer class="border-top footer text-muted">
-        <div class="container">
+                        <li class="menu-item"><a asp-controller="FunctionalGroups" asp-action="Index">Functional Groups</a></li>
+                        <li class="menu-item"><a asp-controller="NamedReactions" asp-action="Index">Named Reactions</a></li>
+                        <li class="menu-item"><a asp-controller="References" asp-action="Index">References</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </footer>
-        -->
+    </section>
+
+
     <footer class="main-footer clearfix" role="contentinfo">
         <div class="main-footer__inner">
             <div class="region-footer">
@@ -224,26 +178,15 @@
         </div>
     </footer>
 
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=">
-        </script>
-    </environment>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="~/lib/chosen/docsupport/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <script src="~/lib/chosen/chosen.jquery.js" type="text/javascript"></script>
+    <script src="~/lib/chosen/docsupport/init.js" type="text/javascript" charset="utf-8"></script>
+
 </body>
 </html>

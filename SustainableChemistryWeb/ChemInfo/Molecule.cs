@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SustainableChemistryWeb.ChemInfo
 {
@@ -60,8 +58,14 @@ namespace SustainableChemistryWeb.ChemInfo
             pathsFound = false;
             smilesLexer lexer = new smilesLexer(new Antlr4.Runtime.AntlrInputStream(smiles));
             smilesParser parser = new smilesParser(new Antlr4.Runtime.CommonTokenStream(lexer));
-            int err = parser.NumberOfSyntaxErrors;
-            this.m_Atoms.AddRange((Atom[])new SmilesVisitor().Visit(parser.smiles()));
+            try
+            {
+                this.m_Atoms.AddRange((Atom[])new SmilesVisitor().Visit(parser.smiles()));
+            }
+            catch (SystemException)
+            {
+                this.m_Atoms.Clear();
+            }
             groupAtoms = new List<FunctionalGroupAtoms>();
             this.FindRings();
             //groupAtoms = new List<Atom[]>();
@@ -174,6 +178,7 @@ namespace SustainableChemistryWeb.ChemInfo
             FusedRings();
             TestHeterocyclic();
             TestAromaticity();
+            TestHeterocyclicAromaticity();
             ringsFound = true;
             return ConvertToArrayArray(cycles);
         }
@@ -423,9 +428,9 @@ namespace SustainableChemistryWeb.ChemInfo
             isRingHeterocyclic = new bool[cycles.Count];
             for (int i = 0; i < cycles.Count; i++)
             {
+                isRingHeterocyclic[i] = false;
                 foreach (Atom a in cycles[i])
                 {
-                    isRingHeterocyclic[i] = false;
                     if (a.Element != ELEMENTS.C)
                     {
                         isRingHeterocyclic[i] = true;
@@ -441,45 +446,55 @@ namespace SustainableChemistryWeb.ChemInfo
             if (this.aromaticitySet) return;
             this.aromaticitySet = true;
             if (this.cycles.Count == 0) Aromatic = false;
-            foreach (Atom a in this.Atoms)
-            {
-                if (a.AtomType == ChemInfo.AtomType.AROMATIC)
-                {
-                    Aromatic = true;
-                    return;
-                }
-            }
             isRingAromatic = new bool[cycles.Count];
-            isRingHeterocyclicAromatic = new bool[cycles.Count];
             for (int i = 0; i < cycles.Count; i++)
             {
                 int numPi = 0;
                 isRingAromatic[i] = false;
-                isRingHeterocyclicAromatic[i] = false;
-                foreach (Atom a in cycles[i])
+                if (cycles[i][0].AtomType == ChemInfo.AtomType.AROMATIC)
                 {
-                    numPi = numPi + a.NumPiElectrons;
+                    isRingAromatic[i] = true;
+                    Aromatic = true;
+                }
+                else
+                {
+                    foreach (Atom a in cycles[i])
+                    {
+                        numPi = numPi + a.NumPiElectrons;
+                    }
                 }
                 if ((numPi - 2) % 4 == 0)
                 {
                     isRingAromatic[i] = true;
-                    isRingHeterocyclicAromatic[i] = true;
                     Aromatic = true;
                     foreach (Atom a in cycles[i])
                     {
                         a.AtomType = AtomType.AROMATIC;
-                        if (a.Element != ELEMENTS.C)
+                        foreach (Bond b in a.BondedAtoms)
                         {
-                            isRingHeterocyclicAromatic[i] = true;
-                            HeterocyclicAromatic = true;
-                        }
-                        foreach (Atom connected in a.ConnectedAtoms)
-                        {
-                            int aIndex = this.m_Atoms.IndexOf(a);
-                            int connectedIndex = this.m_Atoms.IndexOf(connected);
-                            if (connected.AtomType == AtomType.AROMATIC) a.GetBond(connected).BondType = BondType.Aromatic;
+                            if (cycles[i].Contains(b.ConnectedAtom))
+                                b.BondType = BondType.Aromatic;
                         }
                     }
+                }
+            }
+        }
+
+        void TestHeterocyclicAromaticity()
+        {
+            isRingHeterocyclicAromatic = new bool[cycles.Count];
+            if (!this.Aromatic || !this.Heterocyclic)
+            {
+                HeterocyclicAromatic = false;
+                return;
+            }
+            for (int i = 0; i < cycles.Count; i++)
+            {
+                isRingHeterocyclicAromatic[i] = false;
+                if (isRingAromatic[i] && isRingHeterocyclic[i])
+                {
+                    this.HeterocyclicAromatic = true;
+                    isRingHeterocyclicAromatic[i] = true;
                 }
             }
         }
@@ -523,8 +538,9 @@ namespace SustainableChemistryWeb.ChemInfo
             return this.Match(ref pn, ref matches, ref atoms, new FunctionalGroupState(m, this, false));
         }
 
-        public bool FindFunctionalGroup(SustainableChemistryWeb.Models.AppFunctionalgroup group)
+        public bool FindFunctionalGroup(SustainableChemistryWeb.Models.FunctionalGroup group)
         {
+            if (this.Atoms.Length == 0) return false;
             Molecule m = new Molecule(group.Smarts);
             bool retVal = false;
             int pn = 0;

@@ -1,69 +1,89 @@
-﻿@model IEnumerable<SustainableChemistryWeb.Models.AppNamedreaction>
+﻿@model IEnumerable<SustainableChemistryWeb.Models.NamedReaction>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
+<h3><a asp-controller="Home" asp-action="Index">Sustainable Chemistry Expert Framework</a>  - Named Reactions List</h3>
+@using (Html.BeginForm("Index", "NamedReactions", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @if (User.Identity.IsAuthenticated)
+    {
         <p>
-            Find by name: <input type="text" name="NameSearchString" value="@ViewData[" currentFilter"]" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="Index">Back to Full List</a>
+            <a asp-action="Create">Create New</a>
         </p>
-    </div>
-</form>
-
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by functional group: <input type="text" name="FuncGroupSearchString" value="@ViewData["currentFilter"]" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="Index">Back to Full List</a>
-        </p>
-    </div>
-</form>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FunctionalGroup)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <a href="@item.Url">@Html.DisplayFor(modelItem => item.Name)</a>                
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FunctionalGroup.Name)
-            </td>
-            <td>
-                <img src="~/@item.Image" style='height: auto; width: 100%; object-fit: contain' />
-                <!-- @Html.DisplayFor(modelItem => item.Image) -->
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
     }
-        </tbody>
-    </table>
+    <p>
+        This page provides links to non-EPA web sites that provide additional information about the name reactions listed below. You will leave the EPA.gov domain and enter another page with
+        more information. EPA cannot attest to the accuracy of information on that non-EPA page. Providing links to a non-EPA Web site is not an endorsement of the other site or
+        the information it contains by EPA or any of its employees. Also, be aware that the privacy protection provided on the EPA.gov domain
+        (see <a href="/home/privacy-and-security-notice">Privacy and Security Notice</a>) may not be available at the external link.
+        <span class="disclaimer">
+            The following links exit the site <a class="exit-disclaimer" href="https://www.epa.gov/home/exit-epa" title="EPA's External Link Disclaimer">Exit</a>
+        </span>
+    </p>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" name="searchString" placeholder="Enter the Name Reaction or the Name of the Functional Group that you want to find" />
+        <div class="input-group-append">
+            <button asp-action="Index" class="btn btn-outline-secondary" type="submit">Search</button>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col" width="15%">@Html.DisplayNameFor(model => model.Name)</th>
+                    <th scope="col" width="15%">@Html.DisplayNameFor(model => model.FunctionalGroup)</th>
+                    <th scope="col" width="15%">Links</th>
+                    <th scope="col" width="45%">@Html.DisplayNameFor(model => model.Image)</th>
+                    <th scope="col" width="10%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                        </td>
+                        <td>
+                            <a asp-controller="FunctionalGroups" asp-action="Details" asp-route-id="@item.FunctionalGroupId">@Html.DisplayFor(modelItem => item.FunctionalGroup.Name)</a>
+                        </td>
+                        <td>
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a href="@Html.DisplayFor(modelItem => item.Url)" target="_newtab">General Information</a>
+                                </li>
+                                <li class="nav-item">
+                                    -------
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="References" asp-action="Index" asp-route-namedReactionId="@item.Id">References</a>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <img src="~/@item.Image" class="img-fluid" width="450" />
+                        </td>
+                        <td>
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> <text> | </text>
+                                    }
+                                </li>
+                                <li class="nav-item">
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    }
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

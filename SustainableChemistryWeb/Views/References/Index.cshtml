@@ -1,0 +1,75 @@
+﻿@model IEnumerable<SustainableChemistryWeb.ViewModels.ReferenceViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3><a asp-controller="Home" asp-action="Index">Sustainable Chemistry Expert Framework</a>  - Reference List</h3>
+
+@using (Html.BeginForm("Index", "References", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @if (User.Identity.IsAuthenticated)
+    {
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+    }
+    <p>
+        This page provides links to non-EPA web sites that provide the reference listed beow. You will leave the EPA.gov domain and enter another page with
+        more information. EPA cannot attest to the accuracy of information on that non-EPA page. Providing links to a non-EPA Web site is not an endorsement of the other site or
+        the information it contains by EPA or any of its employees. Also, be aware that the privacy protection provided on the EPA.gov domain
+        (see <a href="/home/privacy-and-security-notice">Privacy and Security Notice</a>) may not be available at the external link.
+        <span class="disclaimer">
+            The following links exit the site <a class="exit-disclaimer" href="https://www.epa.gov/home/exit-epa" title="EPA's External Link Disclaimer">Exit</a>
+        </span>
+    </p>
+
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" name="searchString" placeholder="Enter the Name Reaction or the Name of the Functional Group that you want to find" />
+        <div class="input-group-append">
+            <button asp-action="Index" class="btn btn-outline-secondary" type="submit">Search</button>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FunctionalGroup)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Reaction)
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="FunctionalGroups" asp-action="Index" asp-route-funcGroupId="@item.FunctionalGroupId">@Html.DisplayFor(modelItem => item.FunctionalGroup.Name)</a>
+                    </td>
+                    <td>
+                        <a asp-controller="Namedreactions" asp-action="Details" asp-route-id="@item.ReactionId">@Html.DisplayFor(modelItem => item.Reaction.Name)</a>
+                    </td>
+                    <td>
+                        <a href="@item.URL" target="_newtab">@Html.DisplayFor(modelItem => item.Text)</a>
+                    </td>
+                    <td>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> <text> | </text>
+                        }
+                        <a asp-action="Details" asp-route-id="@item.Id"> Details </a>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <text> | </text><a asp-action="Delete" asp-route-id="@item.Id"> Delete </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

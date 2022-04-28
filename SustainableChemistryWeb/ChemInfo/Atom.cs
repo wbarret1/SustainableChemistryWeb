@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SustainableChemistryWeb.ChemInfo
 {
@@ -11,7 +9,8 @@ namespace SustainableChemistryWeb.ChemInfo
     {
         NONE = 0x00,
         ORGANIC = 0x01,
-        AROMATIC = 0x03
+        AROMATIC = 0x03,
+        WILDCARD = 0x04
     }
 
     [Flags]
@@ -428,7 +427,7 @@ namespace SustainableChemistryWeb.ChemInfo
             get
             {
                 //if (HydrogenCount != 0) return HydrogenCount;
-                //if (m_ExplicitHydrogens != 0) return m_ExplicitHydrogens;
+                if (m_ExplicitHydrogens != 0) return m_ExplicitHydrogens;
                 if (this.AtomType == AtomType.ORGANIC || this.AtomType == AtomType.NONE)
                 {
                     return this.Valence - this.NumberOfBonds;
@@ -469,7 +468,7 @@ namespace SustainableChemistryWeb.ChemInfo
                         if (this.Degree == 2 && bonds == 3) return 1;
                         return 0;
                     case ELEMENTS.C:
-                        if (this.Degree == 3)
+                        if ((this.Degree + this.NumHydrogens) == 3)
                         {
                             if (bonds == 3) return 1;
                             if (bonds == 4 && this.Charge == 0)
@@ -483,16 +482,16 @@ namespace SustainableChemistryWeb.ChemInfo
                             }
                             if (this.Charge == -1 && bonds == 3) return 2;
                         }
-                        if (this.Degree == 2 && bonds == 3 && (this.Charge == 1 || this.Charge == -1)) return 1;
+                        if ((this.Degree + this.NumHydrogens) == 2 && bonds == 3 && (this.Charge == 1 || this.Charge == -1)) return 1;
                         return 0;
                     case ELEMENTS.N:
-                        if (this.Degree == 3)
+                        if ((this.Degree + this.NumHydrogens) == 3)
                         {
                             if (this.NumberOfBonds == 3 && Charge == 0) return 2;
                             if (this.NumberOfBonds == 4 && this.Charge == 1) return 1;
                             if (this.NumberOfBonds == 5 && this.Charge == 1) return 1;
                         }
-                        if (this.Degree == 2)
+                        if ((this.Degree + this.NumHydrogens) == 2)
                         {
                             if (this.NumberOfBonds == 2 && this.Charge == -1) return 2;
                             if (this.NumberOfBonds == 3 && this.Charge == 0) return 1;
@@ -503,9 +502,9 @@ namespace SustainableChemistryWeb.ChemInfo
                         if (this.Charge == +1 && this.NumberOfBonds == 3 && this.ConnectedAtoms.Length == 2) return 2;
                         return 0;
                     case ELEMENTS.S:
-                        if (this.Degree == 2 && this.ConnectedAtoms.Length == 2) return 2;
-                        if (this.Degree == 2 && this.ConnectedAtoms.Length == 2 && this.NumberOfBonds == 3 && this.Charge == +1) return 1;
-                        if (this.Degree == 3 && this.NumberOfBonds == 4)
+                        if ((this.Degree + this.NumHydrogens) == 2 && this.ConnectedAtoms.Length == 2) return 2;
+                        if ((this.Degree + this.NumHydrogens) == 2 && this.ConnectedAtoms.Length == 2 && this.NumberOfBonds == 3 && this.Charge == +1) return 1;
+                        if ((this.Degree + this.NumHydrogens) == 3 && this.NumberOfBonds == 4)
                         {
                             foreach (Atom a in this.ConnectedAtoms)
                             {
@@ -521,15 +520,15 @@ namespace SustainableChemistryWeb.ChemInfo
                         }
                         return 0;
                     case ELEMENTS.P:
-                        if (this.Degree == 3) return 0;
+                        if ((this.Degree + this.NumHydrogens) == 3) return 0;
                         return 1;
                     case ELEMENTS.As:
-                        if (this.Degree == 3) return 0;
+                        if ((this.Degree + this.NumHydrogens) == 3) return 0;
                         return 1;
                     case ELEMENTS.Se:
-                        if (this.Degree == 2 && this.NumberOfBonds == 2 && this.Charge == 0) return 2;
-                        if (this.Degree == 2 && this.NumberOfBonds == 3 && this.Charge == +1) return 1;
-                        if (this.Degree == 3)
+                        if ((this.Degree + this.NumHydrogens) == 2 && this.NumberOfBonds == 2 && this.Charge == 0) return 2;
+                        if ((this.Degree + this.NumHydrogens) == 2 && this.NumberOfBonds == 3 && this.Charge == +1) return 1;
+                        if ((this.Degree + this.NumHydrogens) == 3)
                         {
                             foreach (Atom a in this.ConnectedAtoms)
                             {
@@ -663,7 +662,7 @@ namespace SustainableChemistryWeb.ChemInfo
             else if (argb.Length == 4) this.Color = System.Drawing.Color.FromArgb(argb[0], argb[1], argb[2], argb[3]);
             else this.Color = System.Drawing.Color.Black;
         }
- 
+
         void ResetColor(System.Drawing.Color color)
         {
             this.SetColor(SustainableChemistryWeb.ChemInfo.Element.ElementColor(m_Element));

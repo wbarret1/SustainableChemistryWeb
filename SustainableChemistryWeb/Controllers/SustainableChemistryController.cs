@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SustainableChemistryWeb.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SustainableChemistryWeb.Controllers
 {
@@ -16,7 +13,7 @@ namespace SustainableChemistryWeb.Controllers
         public string Smarts { get; set; }
     }
 
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class SustainableChemistryController : ControllerBase
     {
@@ -31,9 +28,10 @@ namespace SustainableChemistryWeb.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        // GET: api/SustainableChemistry
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppFunctionalgroup>>> GetFunctionalGroupList()
+        // GET: /SustainableChemistry/GetFunctionalGroupList
+        [HttpGet("GetFunctionalGroupList")]
+        [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<FunctionalGroup>>> GetFunctionalGroupList()
         {
             var fG = await _context.AppFunctionalgroup.ToListAsync();
             var retVal = new List<AppFunctionalgroupDTO>();
@@ -50,9 +48,10 @@ namespace SustainableChemistryWeb.Controllers
             return Ok(retVal);
         }
 
-        // GET: api/SustainableChemistry/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<AppFunctionalgroup>> GetFunctionalGroup(long id)
+        // GET: /SustainableChemistry/GetFunctionalGroup/5
+        [HttpGet("GetFunctionalGroup/{id}")]
+        [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+        public async Task<ActionResult<FunctionalGroup>> GetFunctionalGroup(long id)
         {
             var group = await _context.AppFunctionalgroup.FindAsync(id);
 
@@ -69,9 +68,10 @@ namespace SustainableChemistryWeb.Controllers
             });
         }
 
-        // GET: api/SustainableChemistry/bySmiles?smiles=O=P(OC)(OC)C
-        [HttpGet("bySmiles")]
-        public async Task<ActionResult<AppFunctionalgroup>> GetFunctionalGroups(string smiles)
+        // GET: /SustainableChemistry/GetFunctionalGroups?smiles=O=P(OC)(OC)C
+        [HttpGet("GetFunctionalGroups")]
+        [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+        public async Task<ActionResult<FunctionalGroup>> GetFunctionalGroups(string smiles)
         {
             var fG = await _context.AppFunctionalgroup.ToListAsync();
             ChemInfo.Molecule molecule = new ChemInfo.Molecule(smiles);
@@ -80,7 +80,7 @@ namespace SustainableChemistryWeb.Controllers
             {
                 string smarts = group.Smarts;
                 if (!string.IsNullOrEmpty(group.Smarts))
-                    if (molecule.FindFunctionalGroup(group.Smarts))
+                    if (molecule.FindFunctionalGroup(group))
                     {
                         retVal.Add(new AppFunctionalgroupDTO()
                         {
@@ -94,9 +94,10 @@ namespace SustainableChemistryWeb.Controllers
             return Ok(retVal);
         }
 
-        // GET: api/SustainableChemistry/byMolecule?smiles=O=P(OC)(OC)C
-        [HttpGet("byMolecule")]
-        public async Task<ActionResult<AppFunctionalgroup>> GetMolecule(string smiles)
+        // GET: /SustainableChemistry/GetMolecule?smiles=O=P(OC)(OC)C
+        [HttpGet("GetMolecule")]
+        [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+        public async Task<ActionResult<FunctionalGroup>> GetMolecule(string smiles)
         {
             var fG = await _context.AppFunctionalgroup.ToListAsync();
             ChemInfo.Molecule molecule = new ChemInfo.Molecule(smiles);
