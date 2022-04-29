@@ -1,0 +1,25 @@
+digraph ATN {
+rankdir=LR;
+s314[fontsize=11, label="314", shape=doublecircle, fixedsize=true, width=.6];
+s785[fontsize=11,label="785", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s786[fontsize=11,label="786", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s787[fontsize=11,label="787", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s788[fontsize=11,label="788", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s789[fontsize=11,label="789", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s790[fontsize=11,label="790", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s791[fontsize=11,label="{&rarr;\n791\nd=1|{<p0>|<p1>|<p2>|<p3>}}", shape=record, fixedsize=false, peripheries=1];
+s792[fontsize=11,label="&larr;\n792", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s313[fontsize=11,label="313", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s313 -> s791 [fontname="Times-Italic", label="&epsilon;"];
+s791:p0 -> s785 [fontname="Times-Italic", label="&epsilon;"];
+s791:p1 -> s786 [fontname="Times-Italic", label="&epsilon;"];
+s791:p2 -> s788 [fontname="Times-Italic", label="&epsilon;"];
+s791:p3 -> s790 [fontname="Times-Italic", label="&epsilon;"];
+s785 -> s792 [fontsize=11, fontname="Courier", arrowsize=.7, label = "{'B'..'C', 'F', 'N'..'P', 'S'}", arrowhead = normal];
+s786 -> s787 [fontsize=11, fontname="Courier", arrowsize=.7, label = "'C'", arrowhead = normal];
+s788 -> s789 [fontsize=11, fontname="Courier", arrowsize=.7, label = "'B'", arrowhead = normal];
+s790 -> s792 [fontsize=11, fontname="Courier", arrowsize=.7, label = "'I'", arrowhead = normal];
+s792 -> s314 [fontname="Times-Italic", label="&epsilon;"];
+s787 -> s792 [fontsize=11, fontname="Courier", arrowsize=.7, label = "'l'", arrowhead = normal];
+s789 -> s792 [fontsize=11, fontname="Courier", arrowsize=.7, label = "'r'", arrowhead = normal];
+}

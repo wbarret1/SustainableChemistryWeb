@@ -1,0 +1,22 @@
+digraph ATN {
+rankdir=LR;
+s33[fontsize=11, label="33", shape=doublecircle, fixedsize=true, width=.6];
+s32[fontsize=11,label="32", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s208[fontsize=11,label="208", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s209[fontsize=11,label="{&rarr;\n209\nd=28|{<p0>|<p1>}}", shape=record, fixedsize=false, peripheries=1];
+s210[fontsize=11,label="&larr;\n210", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s204[fontsize=11,label="204", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s205[fontsize=11,label="205", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s206[fontsize=11,label="{&rarr;\n206\nd=27|{<p0>|<p1>}}", shape=record, fixedsize=false, peripheries=1];
+s207[fontsize=11,label="&larr;\n207", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s32 -> s204 [fontname="Times-Italic", label="&epsilon;"];
+s204 -> s206 [fontsize=11, fontname="Courier", arrowsize=.7, label = "DIGIT", arrowhead = normal];
+s206:p0 -> s205 [fontname="Times-Italic", label="&epsilon;"];
+s206:p1 -> s207 [fontname="Times-Italic", label="&epsilon;"];
+s205 -> s207 [fontsize=11, fontname="Courier", arrowsize=.7, label = "DIGIT", arrowhead = normal];
+s207 -> s209 [fontname="Times-Italic", label="&epsilon;"];
+s209:p0 -> s208 [fontname="Times-Italic", label="&epsilon;"];
+s209:p1 -> s210 [fontname="Times-Italic", label="&epsilon;"];
+s208 -> s210 [fontsize=11, fontname="Courier", arrowsize=.7, label = "DIGIT", arrowhead = normal];
+s210 -> s33 [fontname="Times-Italic", label="&epsilon;"];
+}

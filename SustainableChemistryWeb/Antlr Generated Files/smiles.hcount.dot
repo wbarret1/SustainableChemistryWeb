@@ -1,0 +1,17 @@
+digraph ATN {
+rankdir=LR;
+s29[fontsize=11, label="29", shape=doublecircle, fixedsize=true, width=.6];
+s193[fontsize=11,label="193", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s194[fontsize=11,label="194", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s195[fontsize=11,label="195", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s196[fontsize=11,label="{&rarr;\n196\nd=25|{<p0>|<p1>}}", shape=record, fixedsize=false, peripheries=1];
+s197[fontsize=11,label="&larr;\n197", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s28[fontsize=11,label="28", shape=circle, fixedsize=true, width=.55, peripheries=1];
+s28 -> s196 [fontname="Times-Italic", label="&epsilon;"];
+s196:p0 -> s193 [fontname="Times-Italic", label="&epsilon;"];
+s196:p1 -> s194 [fontname="Times-Italic", label="&epsilon;"];
+s193 -> s197 [fontsize=11, fontname="Courier", arrowsize=.7, label = "'H'", arrowhead = normal];
+s194 -> s195 [fontsize=11, fontname="Courier", arrowsize=.7, label = "'H'", arrowhead = normal];
+s197 -> s29 [fontname="Times-Italic", label="&epsilon;"];
+s195 -> s197 [fontsize=11, fontname="Courier", arrowsize=.7, label = "DIGIT", arrowhead = normal];
+}
